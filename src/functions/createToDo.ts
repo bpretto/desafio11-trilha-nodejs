@@ -1,5 +1,4 @@
-import { V4 as uuidv4 } from 'uuid';
-import dayjs from "dayjs"
+import { v4 as uuidv4 } from 'uuid';
 import { document } from "../utils/dynamodbClient"
 
 interface IToDo {
@@ -15,24 +14,24 @@ export const handle = async (event) => {
     const { title, deadline } = JSON.parse(event.body)
     const id = uuidv4()
 
-    const ToDo:IToDo = {
+    const toDo:IToDo = {
         id,
         user_id,
         title,
         done: false,
-        deadline: dayjs().format("DD/MM/YYYY")
+        deadline: deadline
     }
 
     await document.put({
         TableName: "to_dos",
-        Item: ToDo
+        Item: toDo
     }).promise();
 
     return {
         statusCode: 201,
         body: JSON.stringify({
             message: "To do created!",
-            ToDo
+            toDo
         }),
         headers: {
             "Content-type": "application/json"
